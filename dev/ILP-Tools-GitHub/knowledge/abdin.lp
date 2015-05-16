@@ -1,0 +1,12 @@
+0{initiatedAt(fighting(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{initiatedAt(moving(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{initiatedAt(meeting(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{terminatedAt(fighting(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{terminatedAt(moving(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{terminatedAt(meeting(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{initiatedAt(fighting(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{initiatedAt(moving(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{initiatedAt(meeting(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{terminatedAt(fighting(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{terminatedAt(moving(X0,X1),X2):person(X0):person(X1):time(X2)}3.
+0{terminatedAt(meeting(X0,X1),X2):person(X0):person(X1):time(X2)}3.
