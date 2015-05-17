@@ -11,8 +11,11 @@ import parsing.LogicParser._
 
 object Core extends ModesParser{
   
+  val aspSolverPath = new java.io.File("./lib").getCanonicalPath 
   val modesFile = new java.io.File("./knowledge/modes").getCanonicalPath
   val abdFile = new java.io.File("./knowledge/abdin.lp").getCanonicalPath
+  val exmplsFile = new java.io.File("./knowledge/examples.lp").getCanonicalPath
+  val bkFile = new java.io.File("./knowledge/bk.lp").getCanonicalPath
   val matches = (p: Regex, str: String) => p.pattern.matcher(str).matches
   val modes = Source.fromFile(modesFile).getLines.toList.map(x => x.replaceAll("\\s", "")).filter(line => !matches("""""".r, line))
   val modehs = modes.filter(m => m.contains("modeh") && !m.startsWith("%")).map(x => x).map(x => getParseResult(parseModes(modeh,x)))

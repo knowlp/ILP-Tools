@@ -9,17 +9,25 @@ import scala.collection.mutable.ListBuffer
 
 object Structures {
 
-   sealed trait Term
+   //sealed trait Term
 
+   sealed class Term {
+      val tostring: String = ""
+   }
+   
    /*
  * A variable is any identifier consisting of letters, digits and underscore, starting with an upper-case letter
  */
-   case class Variable(name: String) extends Term
+   case class Variable(name: String) extends Term {
+      override val tostring = name
+   }
 
    /*
  * A variable is any identifier consisting of letters, digits and underscore, starting with an lower-case letter
  */
-   case class Constant(name: String) extends Term
+   case class Constant(name: String) extends Term {
+      override val tostring = name
+   }
 
    /*/
  * An positive literal is a non-negated compound term
@@ -33,6 +41,16 @@ object Structures {
  */
    case class Literal(functor: String, terms: List[Term], isNAF: Boolean) extends Term {
       val arity = terms.length
+      override val tostring: String = terms match {
+         case List() => functor
+         case _ => functor + "(" + (for (a <- terms; val x =
+            a match {
+            case Constant(_) => a.asInstanceOf[Constant] 
+            case Variable(_) => a.asInstanceOf[Variable]
+            case Literal(_,_,_) => a.asInstanceOf[Literal]
+            //case _ => None
+            }) yield x.tostring).mkString(",") + ")"
+      }
    }
 
    /*
@@ -45,7 +63,7 @@ object Structures {
    
 
    case class ModeAtom(functor: String, args: List[ModeAtom]) extends Term {
-      val tostring: String = args match {
+      override val tostring: String = args match {
          case List() => functor
          case _ => functor + "(" + (for (a <- args) yield a.tostring).mkString(",") + ")"
       }

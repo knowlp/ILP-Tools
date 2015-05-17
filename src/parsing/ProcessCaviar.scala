@@ -107,15 +107,19 @@ object ProcessCaviar {
           if(matched != Seq()) all += (key -> matched)
         } 
       }
-      val allButLLEs = for((k,v) <- all; if k != "lles") yield (k,v)
+      //val allButLLEs = for((k,v) <- all; if k != "lles") yield (k,v)
+      val allButLLEs = for((k,v) <- all; if true) yield (k,v) // We need to search in the LLEs too... I should fix this at some time, there in no point in doing this here
       val examples = for(x <- all("lles");
                   val t = for(t <- allButLLEs.keySet) yield allButLLEs(t);
                   val y = formExample(x._1,t.toList)) 
                   yield (x._1,x._2 :: y)
-      val collection = MongoClient()("CAVIAR")("examples")
+      
+      val dbName = "CAVIAR-"+dirName.split("/").last //the db is created at this point           
+      val collection = MongoClient()(dbName)("examples")
+      collection.drop // clear it in any case
       // Store in Mongo
       examples.foreach(toMongo(_,collection))
-      //for( e <- examples) toMongo(e,collection)
+      
       
       
     }

@@ -1,0 +1,33 @@
+0{initiatedAt(fighting(X0,X1),X2):person(X0):person(X1):time(X2)}10.
+0{initiatedAt(moving(X0,X1),X2):person(X0):person(X1):time(X2)}10.
+0{initiatedAt(meeting(X0,X1),X2):person(X0):person(X1):time(X2)}10.
+0{terminatedAt(fighting(X0,X1),X2):person(X0):person(X1):time(X2)}10.
+0{terminatedAt(moving(X0,X1),X2):person(X0):person(X1):time(X2)}10.
+0{terminatedAt(meeting(X0,X1),X2):person(X0):person(X1):time(X2)}10.
+
+#minimize{holdsAt(fighting(X0,X1),X2),holdsAt(moving(X0,X1),X2),holdsAt(meeting(X0,X1),X2),holdsAt(fighting(X0,X1),X2),holdsAt(moving(X0,X1),X2),holdsAt(meeting(X0,X1),X2)}.
+
+
+:- initiatedAt(fighting(X0,X1),X2), not example(initiatedAt(fighting(X0,X1),X2)).
+:- initiatedAt(moving(X0,X1),X2), not example(initiatedAt(moving(X0,X1),X2)).
+:- initiatedAt(meeting(X0,X1),X2), not example(initiatedAt(meeting(X0,X1),X2)).
+:- terminatedAt(fighting(X0,X1),X2), not example(terminatedAt(fighting(X0,X1),X2)).
+:- terminatedAt(moving(X0,X1),X2), not example(terminatedAt(moving(X0,X1),X2)).
+:- terminatedAt(meeting(X0,X1),X2), not example(terminatedAt(meeting(X0,X1),X2)).
+:- example(initiatedAt(fighting(X0,X1),X2)), not initiatedAt(fighting(X0,X1),X2).
+:- example(initiatedAt(moving(X0,X1),X2)), not initiatedAt(moving(X0,X1),X2).
+:- example(initiatedAt(meeting(X0,X1),X2)), not initiatedAt(meeting(X0,X1),X2).
+:- example(terminatedAt(fighting(X0,X1),X2)), not terminatedAt(fighting(X0,X1),X2).
+:- example(terminatedAt(moving(X0,X1),X2)), not terminatedAt(moving(X0,X1),X2).
+:- example(terminatedAt(meeting(X0,X1),X2)), not terminatedAt(meeting(X0,X1),X2).
+
+
+#hide.
+
+
+#show initiatedAt(fighting(X0,X1),X2).
+#show initiatedAt(moving(X0,X1),X2).
+#show initiatedAt(meeting(X0,X1),X2).
+#show terminatedAt(fighting(X0,X1),X2).
+#show terminatedAt(moving(X0,X1),X2).
+#show terminatedAt(meeting(X0,X1),X2).

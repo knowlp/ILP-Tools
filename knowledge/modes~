@@ -1,9 +1,9 @@
 modeh(initiatedAt(fighting(+person,+person),+time))
 modeh(initiatedAt(moving(+person,+person),+time))
-modeh(initiatedAt(meeting(+person,+person),+time))
+%modeh(initiatedAt(meeting(+person,+person),+time))
 modeh(terminatedAt(fighting(+person,+person),+time))
 modeh(terminatedAt(moving(+person,+person),+time))
-modeh(terminatedAt(meeting(+person,+person),+time))
+%modeh(terminatedAt(meeting(+person,+person),+time))
 
 modeb(happensAt(walking(+person),+time))
 modeb(happensAt(standing(+person),+time))
@@ -11,10 +11,8 @@ modeb(happensAt(active(+person),+time))
 modeb(happensAt(inactive(+person),+time))
 modeb(happensAt(abrupt(+person),+time))
 
-modeh(holdsAt(fighting(+person,+person),+time))
-modeh(holdsAt(moving(+person,+person),+time))
-modeh(holdsAt(meeting(+person,+person),+time))
-modeh(holdsAt(fighting(+person,+person),+time))
-modeh(holdsAt(moving(+person,+person),+time))
-modeh(holdsAt(meeting(+person,+person),+time))
+%examplePattern(holdsAt(fighting(+person,+person),+time))
+examplePattern(holdsAt(moving(+person,+person),+time))
+%examplePattern(holdsAt(meeting(+person,+person),+time))
+
 
