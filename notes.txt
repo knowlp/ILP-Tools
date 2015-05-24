@@ -1,0 +1,109 @@
+
+
+
+/*
+ * Check the code examples in the casbah sources!!
+ * 
+ *
+ * ----------------------------------
+ * Some basic DB-related  operations:
+ * ----------------------------------
+ * 
+ * 1. Parse a video into a db: Utils.parseCaviar("/home/nkatz/dev/CAVIAR-abrupt/01-Walk1") 
+ * 2. Parse all CAVIAR into dbs: caviartoMongo("/home/nkatz/dev/CAVIAR-abrupt") 
+ * 3. Get all examples from a single video and write them to ASP: getAllExamples("CAVIAR-29-Fight_OneManDown3", "examples")
+ * 4. Get one example by time:
+ *    val col = MongoClient()("CAVIAR-01-Walk1")("examples")
+      getOneExample("time", 37760, col)
+   5.    
+ */
+
+
+
+/**
+ * 
+ * Pattern matching with case classes. 
+ * 
+/* Pattern match on the class */
+def test(x: Expression) = {
+   x match {
+     case l: Literal => l.skolemize(_, _)
+   }   
+} 
+/* Pattern match on the class and its fields */
+def test2(x: Expression) = {
+   x match {
+     case l @ Literal(x,y,z) => l.skolemize(_,_)
+   }   
+} 
+*/
+
+
+Some (XHAIL)-learnt theories from the easy ones...
+
+----------------------------------
+Learnt from '01-Walk1':
+----------------------------------
+terminatedAt(moving(X2,X3),X1).
+initiatedAt(meeting(X2,X3),X1) :- 
+        orientFar(X3,X2,45,X1),
+        distLessThan(X2,X3,34,X1).
+initiatedAt(moving(X1,X2),X3) :- 
+        happensAt(walking(X1),X3),
+        happensAt(walking(X2),X3),
+        distLessThan(X1,X2,27,X3).
+-----------------------------------
+Learnt from '02-Walk2':
+-----------------------------------
+terminatedAt(meeting(X3,X2),X1) :- 
+        distMoreThan(X2,X3,24,X1).
+terminatedAt(moving(X3,X1),X2) :- 
+        happensAt(active(X1),X2).
+initiatedAt(meeting(X3,X1),X2) :- 
+        happensAt(active(X3),X2),
+        happensAt(active(X1),X2).
+initiatedAt(moving(X2,X3),X1) :- 
+        happensAt(enters(X3),X1),
+        distLessThan(X3,X2,25,X1).
+
+-----------------------------------
+Learnt from 12-Rest_WiggleOnFloor:
+-----------------------------------
+terminatedAt(moving(X3,X2),X1).
+initiatedAt(moving(X3,X2),X1) :- 
+        happensAt(walking(X2),X1),
+        happensAt(walking(X3),X1).
+
+---------------------------------
+Learnt from 13-Rest_FallOnFloor:
+---------------------------------
+terminatedAt(meeting(X3,X2),X1).
+initiatedAt(meeting(X2,X3),X1) :- 
+        happensAt(active(X3),X1),
+        happensAt(active(X2),X1).
+
+---------------------------------
+Learnt from 25-Fight_RunAway1
+---------------------------------
+initiatedAt(fighting(X1,X2),X3) :- 
+        happensAt(abrupt(X1),X3),
+        distLessThan(X1,X2,40,X3).
+
+
+---------------------------------
+Learnt from 26-Fight_RunAway2
+---------------------------------
+terminatedAt(fighting(X3,X1),X2).
+initiatedAt(fighting(X3,X1),X2) :- 
+        happensAt(abrupt(X1),X2),
+        holdsAt(visible(X3),X2).
+
+---------------------------------
+Learnt from 26-Fight_RunAway2
+---------------------------------
+terminatedAt(fighting(X3,X1),X2).
+initiatedAt(fighting(X3,X1),X2) :- 
+        happensAt(abrupt(X1),X2),
+        holdsAt(visible(X3),X2).
+
+

@@ -1,0 +1,112 @@
+[0m[[0mdebug[0m] [0m[0m
+[0m[[0mdebug[0m] [0mInitial source changes: [0m
+[0m[[0mdebug[0m] [0m	removed:Set()[0m
+[0m[[0mdebug[0m] [0m	added: Set(/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/ClausalParserTest.scala, /home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala, /home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala)[0m
+[0m[[0mdebug[0m] [0m	modified: Set()[0m
+[0m[[0mdebug[0m] [0mRemoved products: Set()[0m
+[0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set()[0m
+[0m[[0mdebug[0m] [0mModified binary dependencies: Set()[0m
+[0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set(/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/ClausalParserTest.scala, /home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala, /home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala)[0m
+[0m[[0mdebug[0m] [0m[0m
+[0m[[0mdebug[0m] [0mSources indirectly invalidated by:[0m
+[0m[[0mdebug[0m] [0m	product: Set()[0m
+[0m[[0mdebug[0m] [0m	binary dep: Set()[0m
+[0m[[0mdebug[0m] [0m	external source: Set()[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/ClausalParserTest.scala, /home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala, /home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala)[0m
+[0m[[0mdebug[0m] [0mRecompiling all 3 sources: invalidated sources (3) exceeded 50.0% of all sources[0m
+[0m[[0minfo[0m] [0mCompiling 3 Scala sources to /home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/target/scala-2.10/classes...[0m
+[0m[[0mdebug[0m] [0mGetting compiler-interface from component compiler for Scala 2.10.4[0m
+[0m[[0mdebug[0m] [0mGetting compiler-interface from component compiler for Scala 2.10.4[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 1ca997, interfacing (CompilerInterface) with Scala compiler version 2.10.4[0m
+[0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/usr/lib/jvm/java-7-openjdk-i386/jre/lib/resources.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/rt.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/jsse.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/jce.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/charsets.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/rhino.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/jfr.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/classes:/home/nkatz/.sbt/boot/scala-2.10.4/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/target/scala-2.10/classes[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:3: object mongodb is not a member of package com[0m
+[0m[[31merror[0m] [0mimport com.mongodb.casbah.Imports.BasicDBList[0m
+[0m[[31merror[0m] [0m           ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:4: object mongodb is not a member of package com[0m
+[0m[[31merror[0m] [0mimport com.mongodb.casbah.Imports._[0m
+[0m[[31merror[0m] [0m           ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:5: not found: object parsing[0m
+[0m[[31merror[0m] [0mimport parsing.ProcessCaviar._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:6: not found: object reasoning[0m
+[0m[[31merror[0m] [0mimport reasoning.Exceptions._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:8: not found: type CaviarDataParser[0m
+[0m[[31merror[0m] [0mobject CaviarParserTest extends CaviarDataParser {[0m
+[0m[[31merror[0m] [0m                                ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:14: not found: value parseCaviar[0m
+[0m[[31merror[0m] [0m    parseCaviar("/home/nkatz/dev/CAVIAR-abrupt/07-Browse4") // This has no pisitive examples for group activities.[0m
+[0m[[31merror[0m] [0m    ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:25: not found: value MongoClient[0m
+[0m[[31merror[0m] [0m    val collection = MongoClient()("CAVIAR")("examples")[0m
+[0m[[31merror[0m] [0m                     ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:28: not found: value MongoDBObject[0m
+[0m[[31merror[0m] [0m         val query = MongoDBObject(field -> fieldValue)[0m
+[0m[[31merror[0m] [0m                     ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:33: not found: type BasicDBObject[0m
+[0m[[31merror[0m] [0m         val narrative = target.asInstanceOf[BasicDBObject].get("narrative").asInstanceOf[BasicDBList].toList[0m
+[0m[[31merror[0m] [0m                                             ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:33: not found: type BasicDBList[0m
+[0m[[31merror[0m] [0m         val narrative = target.asInstanceOf[BasicDBObject].get("narrative").asInstanceOf[BasicDBList].toList[0m
+[0m[[31merror[0m] [0m                                                                                          ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:34: not found: type BasicDBObject[0m
+[0m[[31merror[0m] [0m         val annotation = target.asInstanceOf[BasicDBObject].get("annotation").asInstanceOf[BasicDBList].toList[0m
+[0m[[31merror[0m] [0m                                              ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:34: not found: type BasicDBList[0m
+[0m[[31merror[0m] [0m         val annotation = target.asInstanceOf[BasicDBObject].get("annotation").asInstanceOf[BasicDBList].toList[0m
+[0m[[31merror[0m] [0m                                                                                            ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:40: not found: type BasicDBObject[0m
+[0m[[31merror[0m] [0m         val x = row.asInstanceOf[BasicDBObject].get("narrative").asInstanceOf[BasicDBList].toList[0m
+[0m[[31merror[0m] [0m                                  ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:40: not found: type BasicDBList[0m
+[0m[[31merror[0m] [0m         val x = row.asInstanceOf[BasicDBObject].get("narrative").asInstanceOf[BasicDBList].toList[0m
+[0m[[31merror[0m] [0m                                                                               ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:41: not found: type BasicDBObject[0m
+[0m[[31merror[0m] [0m         val y = row.asInstanceOf[BasicDBObject].get("annotation").asInstanceOf[BasicDBList].toList[0m
+[0m[[31merror[0m] [0m                                  ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/CaviarParserTest.scala:41: not found: type BasicDBList[0m
+[0m[[31merror[0m] [0m         val y = row.asInstanceOf[BasicDBObject].get("annotation").asInstanceOf[BasicDBList].toList[0m
+[0m[[31merror[0m] [0m                                                                                ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/ClausalParserTest.scala:3: not found: object reasoning[0m
+[0m[[31merror[0m] [0mimport reasoning.Structures._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/ClausalParserTest.scala:4: not found: object parsing[0m
+[0m[[31merror[0m] [0mimport parsing.LogicParser.ClausalLogicParser[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/ClausalParserTest.scala:6: not found: type ClausalLogicParser[0m
+[0m[[31merror[0m] [0mobject ParserTesting extends ClausalLogicParser {[0m
+[0m[[31merror[0m] [0m                             ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/ClausalParserTest.scala:27: not found: value getParseResult[0m
+[0m[[31merror[0m] [0m      val c2 = getParseResult(parse(clause, y))[0m
+[0m[[31merror[0m] [0m               ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/ClausalParserTest.scala:31: not found: type Clause[0m
+[0m[[31merror[0m] [0m      println(c2.asInstanceOf[Clause].skolemise._1.tostring)[0m
+[0m[[31merror[0m] [0m                              ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala:11: not found: object reasoning[0m
+[0m[[31merror[0m] [0mimport reasoning.Structures._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala:12: not found: object reasoning[0m
+[0m[[31merror[0m] [0mimport reasoning.Utils._ [0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala:16: not found: value Literal[0m
+[0m[[31merror[0m] [0m   val x = Literal("test")[0m
+[0m[[31merror[0m] [0m           ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala:19: not found: value reasoning[0m
+[0m[[31merror[0m] [0m   println(reasoning.Utils.objectFactory.getLiteral("test(a,c,d)").tostring)[0m
+[0m[[31merror[0m] [0m           ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala:33: not found: value reasoning[0m
+[0m[[31merror[0m] [0m   val m = reasoning.Utils.objectFactory.getModeHAtom("modeh(initiatedAt(moving(+person,+person,-person),+time))")[0m
+[0m[[31merror[0m] [0m           ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala:36: not found: value reasoning[0m
+[0m[[31merror[0m] [0m   val l = reasoning.Utils.objectFactory.getLiteral("initiatedAt(moving(id1,id2,id1),10)")[0m
+[0m[[31merror[0m] [0m           ^[0m
+[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/testing/GeneralTest.scala:39: not found: value Literal[0m
+[0m[[31merror[0m] [0m   val ll = Literal(l.functor,l.terms,l.isNAF,modeAtom = m)[0m
+[0m[[31merror[0m] [0m            ^[0m
+[0m[[31merror[0m] [0m28 errors found[0m
+[0m[[0mdebug[0m] [0mCompilation failed (CompilerInterface)[0m
+[0m[[31merror[0m] [0m(compile:[31mcompileIncremental[0m) Compilation failed[0m

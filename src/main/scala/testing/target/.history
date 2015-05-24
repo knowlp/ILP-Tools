@@ -1,0 +1,10 @@
+run GeneralTest.scala
+help
+projects
+run 
+compile
+help
+q
+quit
+:quit
+exit

@@ -1,0 +1,2 @@
+2015-05-20 16:40:10,486 INFO [@EXMPL 0] Found delta set: ['initiatedAt(fighting(id2,id6),9000)', 'terminatedAt(fighting(id2,id6),14480)']
+2015-05-20 16:40:11,458 INFO [@EXMPL 0:] Found new Kernel Set

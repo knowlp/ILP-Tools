@@ -1,0 +1,34 @@
+%*
+s :- not p.
+p :- not q.
+q :- not r.
+
+{p}.
+{q}.
+{r}.
+
+s.
+
+
+allowed(1,1..10).
+*%
+
+%*
+shave(noel,X) :- not shave(X,X),person(X).
+mayor(cas).
+
+person(cas).
+person(noel).
+*%
+
+%*
+{p(1..3)}.
+:- {p(X)}2.
+q(X):-p(X),p(X+1),X>1.
+p(X+1):-q(X).
+*%
+
+
+{a,b,c}.
+
+

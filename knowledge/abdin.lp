@@ -1,15 +1,12 @@
-0{initiatedAt(moving(X0,X1),X2):person(X0):person(X1):time(X2)}10.
-0{terminatedAt(moving(X0,X1),X2):person(X0):person(X1):time(X2)}10.
 
-#minimize{initiatedAt(moving(X0,X1),X2),terminatedAt(moving(X0,X1),X2)}.
+:- example(holdsAt(available(X0),X1)), not holdsAt(available(X0),X1).
 
 
-:- holdsAt(moving(X0,X1),X2), not example(holdsAt(moving(X0,X1),X2)).
-:- example(holdsAt(moving(X0,X1),X2)), not holdsAt(moving(X0,X1),X2).
+:- holdsAt(available(X0),X1), not example(holdsAt(available(X0),X1)).
 
+{happens(use(X0),X1):sugar(X0):time(X1)}.
+#minimize{ happens(use(X0),X1)}.
 
 #hide.
+#show happens(use(X0),X1).
 
-
-#show initiatedAt(moving(X0,X1),X2).
-#show terminatedAt(moving(X0,X1),X2).
