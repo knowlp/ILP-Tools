@@ -36,10 +36,10 @@ object Structures {
    /**
     * A variable is any term that starts with an upper-case letter
     *
-    * @param name the variable symbol
-    * @param inOrOutVar either '+' or '-' indicating input or output variable, as indicated by mode declarations.
+    * @param name @tparam String the variable symbol
+    * @param inOrOutVar @tparam String either '+' or '-' indicating input or output variable, as indicated by mode declarations.
     * The default parameter is an empty string to allow the constructor to work in cases where mode declarations are not present.
-    * @param _type the (optional) type of the variable
+    * @param _type @tparam String the (optional) type of the variable
     * @overrides val _type from Expression
     */
 
