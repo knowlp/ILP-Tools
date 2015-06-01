@@ -1,4 +1,5 @@
 modeh(happens(use(#sugar),+time))
+modeh(happens(dummyTestMode(#sugar),+time))
 modeb(holdsAt(available(#sugar),+time))
 modeb(not_holdsAt(available(#sugar),+time))
 

@@ -4,7 +4,7 @@
 		module="ilp-tools_2.11"
 		revision="0.1"
 		status="integration"
-		publication="20150523201559"
+		publication="20150531202133"
 	>
 		<description>
 		ILP-Tools
@@ -38,5 +38,6 @@
 		<dependency org="org.scala-lang" name="scala-reflect" rev="2.11.6" conf="compile->default(compile)"/>
 		<dependency org="org.scala-lang.modules" name="scala-parser-combinators_2.11" rev="1.0.3" conf="compile->default(compile)"/>
 		<dependency org="org.scalatest" name="scalatest_2.11" rev="2.1.3" conf="test->default(compile)"/>
+		<dependency org="com.typesafe.akka" name="akka-actor_2.11" rev="2.3.11" conf="compile->default(compile)"/>
 	</dependencies>
 </ivy-module>

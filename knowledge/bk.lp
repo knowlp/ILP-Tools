@@ -19,6 +19,9 @@ fluent(moving(X,Y)) :- person(X),person(Y),X != Y.
 fluent(meeting(X,Y)) :- person(X),person(Y),X != Y.
 fluent(fighting(X,Y)) :- person(X),person(Y),X != Y.
 
+
+
+
 person(X):-
     happensAt(walking(X),_).
 person(X):-
@@ -81,21 +84,21 @@ dist(Id1,Id2,T,Ypot):-
        %Ypot := sqrt(Temp).
        Ypot := @eucldist(X1,Y1,X2,Y2).
 
-close(Id1,Id2,Threshold,Time):-
+distLessThan(Id1,Id2,Threshold,Time):-
        dist(Id1,Id2,Time,Distance),
        Id1 != Id2,
        threshold_value(Threshold),
        Distance <= Threshold,
        person(Id1),person(Id2),time(Time).
 
-not_close(Id1,Id2,Threshold,Time):-
+distMoreThan(Id1,Id2,Threshold,Time):-
        dist(Id1,Id2,Time,Distance),
        Id1 != Id2,
        threshold_value(Threshold),
        Distance > Threshold,
        person(Id1),person(Id2),time(Time).
 
-orientDiff(Id1,Id2,Threshold,Time):-
+orientClose(Id1,Id2,Threshold,Time):-
        Id1 != Id2,
        orientation(Id1,X,Time),
        orientation(Id2,Y,Time),
@@ -105,7 +108,7 @@ orientDiff(Id1,Id2,Threshold,Time):-
        Diff <= Threshold,
        person(Id1),person(Id2),time(Time). 
 
-not_orientDiff(Id1,Id2,Threshold,Time):-
+orientFar(Id1,Id2,Threshold,Time):-
        Id1 != Id2,
        orientation(Id1,X,Time),
        orientation(Id2,Y,Time),
@@ -113,7 +116,7 @@ not_orientDiff(Id1,Id2,Threshold,Time):-
        Diff = #abs(X-Y),
        orientation_threshold(Threshold), 
        Diff > Threshold,
-       person(Id1),person(Id2),ttime(Time).
+       person(Id1),person(Id2),time(Time).
 
 orientation_threshold(45).
 %orientation_threshold(100).
@@ -121,7 +124,13 @@ orientation_threshold(45).
 %orientation_threshold(300).
 %orientation_threshold(360).
 
-threshold_value(20..40). %move
+threshold_value(25).
+threshold_value(24).
+threshold_value(27).
+threshold_value(34).
+%threshold_value(40).
+
+%threshold_value(5..10). %move
 %threshold_value(30). %meet
 %threshold_value(20). %fight 
 

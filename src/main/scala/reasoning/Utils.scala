@@ -37,6 +37,20 @@ object Utils extends ASPResultsParser {
       out
     }
 
+    def getLiteralNoParse1(lit: String, mode: ModeAtom = ModeAtom("", List())): Literal = {
+      val l = getParseResult(parse(literal, lit)).asInstanceOf[Literal]
+      val out = Literal(l.functor, l.terms, l.isNAF, modeAtom = mode)
+      out
+    }
+
+    def getLiteralNoParse(lit: Literal, mode: ModeAtom = ModeAtom("", List())): Literal = {
+      val out = mode match {
+        case ModeAtom("", List()) => lit
+        case _ => Literal(lit.functor, lit.terms, lit.isNAF, modeAtom = mode)
+      }
+      out
+    }
+
     def getModeHAtom(atom: String): ModeAtom = {
       getParseResult(parseModes(modeh, atom))
     }
@@ -57,15 +71,13 @@ object Utils extends ASPResultsParser {
   val replInWord = (tokens: List[String], word: String, replWith: String) =>
     tokens.foldLeft(word)((currentWord, token) => currentWord.replaceAll(token, replWith))
 
+  def clearFile(file: String): Unit = {
+    val writer = new java.io.PrintWriter(new FileWriter(new java.io.File(file), false))
+    writer.write("")
+    writer.close()
+  }
 
-
-  def clearFile(file: String): Unit ={
-  	 val writer = new java.io.PrintWriter(new FileWriter(new java.io.File(file), false))
-      writer.write("")
-      writer.close()
-  } 
-
-    /* 
+  /* 
 	 * Write an iterable to file. Usage:
 	 * 
 	 * writeToFile(new File("example.txt")) { p => data.foreach(p.println) }
@@ -104,7 +116,6 @@ object Utils extends ASPResultsParser {
     w.close()
   }
 
-  
   /*
 	 * -------------------------------------------------------------------------------------------
 	 * Utilities for connecting to mongo and getting examples. Fixes for locking below.
@@ -122,6 +133,21 @@ object Utils extends ASPResultsParser {
 	 * 
 	 * --------------------------------------------------------------------------------------------
 	 */
+
+  /**
+   * Parses all CAVIAR dataset to mongo
+   */
+
+  def caviartoMongo(path: String): Unit = {
+    val splitPath = path.split("/").filter(x => x != "\\s" | x != "") // handle '/' in the path input
+    val dirs = for (file <- new java.io.File(path).listFiles.sorted) yield file.getName()
+    dirs.foreach(x =>
+      try {
+        Utils.parseCaviar(splitPath.mkString("/") + "/" + x)
+      } catch {
+        case e: scala.MatchError => println(e.getMessage)
+      })
+  }
 
   /**
    * Returns the names of all existing DBs. Identifier (if passed) is used to filter the names.

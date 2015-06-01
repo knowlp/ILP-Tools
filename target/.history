@@ -21,3 +21,44 @@ exit
 run
 exit
 run
+exit
+for (y <- List.range(1,x.length+1)) yield y
+run
+compile
+compile -deprecation
+compile deprecation
+run
+run -deprecation
+compile
+eclipse
+run
+compile
+reload
+compile
+run
+:quit
+quit
+:q
+compile
+run
+show java-home
+reload
+compile
+reload
+compile
+run
+reload
+clean
+compile
+run
+compile
+run
+compile
+run
+compile
+run
+reload
+compile
+reload
+compile
+run

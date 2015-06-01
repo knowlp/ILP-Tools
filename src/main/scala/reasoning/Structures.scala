@@ -7,6 +7,9 @@ package reasoning
 
 import scala.collection.mutable.ListBuffer
 import reasoning.Exceptions._
+import scala.util.control.Breaks
+import scala.util.control._
+import com.mongodb.casbah.Imports._
 
 /**
  *
@@ -30,6 +33,7 @@ object Structures {
 
    sealed trait Expression {
       def tostring: String = ""
+      def tostringQuote: String = ""
       def _type: String = ""
    }
 
@@ -45,6 +49,7 @@ object Structures {
 
    case class Variable(name: String, inOrOutVar: String = "", override val _type: String = "") extends Expression {
       override def tostring = name
+      override def tostringQuote = if (inOrOutVar == "-" || inOrOutVar == "#") "\"" + name + "\"" else name
       def asLiteral = Literal(name, List(), false)
    }
 
@@ -53,11 +58,13 @@ object Structures {
     *
     * @param name the constant symbol
     * @param _type the (optional) type of the constant
+    * @param plmrk "+", "-", "#" indicating whether this constant corresponds to a input output or ground placemarker.
     * @overrides val _type from Expression
     */
 
-   case class Constant(name: String, override val _type: String = "") extends Expression {
+   case class Constant(name: String, plmrk: String = "", override val _type: String = "") extends Expression {
       override def tostring = name
+      override def tostringQuote = if (plmrk == "-" || plmrk == "#") "\"" + name + "\"" else name
       def asLiteral = Literal(name, List(), false)
    }
 
@@ -70,24 +77,14 @@ object Structures {
       def arity = terms.length
       def asLiteral = Literal(functor, terms, false, modeAtom, typePreds)
       override def tostring = this.asLiteral.tostring
+      override def tostringQuote = this.asLiteral.tostringQuote
    }
 
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
    /**
-    * A literal is a compound term of the form p(x1,...xn), possibly preceded with 'not' ( 'not p(x1,...xn)' ), 
+    * A literal is a compound term of the form p(x1,...xn), possibly preceded with 'not' ( 'not p(x1,...xn)' ),
     * in which case it is a negated literal. 'p' is the functor of the literal and xi's are each terms. Each xi
-    *  is either a variable, a constant or a non-negated literal. 
-    * 
+    *  is either a variable, a constant or a non-negated literal.
+    *
     * @param functor the predicate/function symbol of the literal.
     * @param terms the inner terms of the literal. This is a var so that it can be updated, by populating the term objects
     * by indicators on whether they correspond to input-output vars or constants, a process that takes place during the
@@ -137,20 +134,87 @@ object Structures {
             ) yield x.tostring).mkString(",") + ")"
       }
 
+      override def tostringQuote: String = terms match {
+         case List() => functor
+         case _ =>
+            val prefix = if (isNAF) s"not $functor" else functor;
+            prefix + "(" + (for (
+               a <- terms; val x = a match {
+                  case x: Constant => x
+                  case x: Variable => x
+                  case x: Literal => x
+                  case x: PosLiteral => x
+                  case _ => throw new LogicException("Unxpected type of inner term while parsing Literal.")
+               }
+            ) yield x.tostringQuote).mkString(",") + ")"
+      }
+
+      /**
+       * @return a mode declarartion atom that matches this literal.
+       * If none is found, returns the empty mode atom ( ModeAtom("",List() )
+       */
+
+      def getMatchingMode: ModeAtom = {
+         var out: ModeAtom = ModeAtom("", List())
+         this.modeAtom match {
+            case ModeAtom("", Nil) =>
+
+               val loop = new Breaks;
+               loop.breakable {
+                  for (x <- Core.modehs ::: Core.modebs) {
+                     val test = if (this.functor != x.functor || this.arity != x.arity) false
+                     else matchesMode(this.terms zip x.args)
+                     //println(x.tostring,test)           
+                     if (test) {
+                        out = x
+                        loop.break()
+                     }
+                  }
+               }
+            case _ => this.modeAtom
+
+         }
+         out
+      }
+
+      def matchesMode(remaining: List[(Expression, Expression)]): Boolean = {
+         remaining match {
+            case head :: tail => head match {
+               case (n: Constant, m: PosPlmrk) => matchesMode(tail)
+               case (n: Constant, m: NegPlmrk) => matchesMode(tail)
+               case (n: Constant, m: ConstPlmrk) => matchesMode(tail)
+               case (n: Variable, m: PosPlmrk) => matchesMode(tail)
+               case (n: Variable, m: NegPlmrk) => matchesMode(tail)
+               case (n: Variable, m: ConstPlmrk) =>
+                  throw new LogicException("Found a variabilized term that corresponds to a grplmrk.")
+               case (n: Literal, m: ModeAtom) =>
+                  if (n.functor != m.functor || n.arity != m.arity) false else matchesMode(n.terms zip m.args)
+               case _ => throw new LogicException("Getting matching mode: Found unexpected term pairing.")
+            }
+            case Nil => true
+         }
+      }
+
       /**
        * Variabilizes a literal. If a matching mode declaration atom is passed with the input, then the literal is variabilzed according
-       * to the directives provided by that atom. Else (if no mode atom is present), each constant of the literal is replaced by a new 
+       * to the directives provided by that atom. Else (if no mode atom is present), each constant of the literal is replaced by a new
        * variable (TODO: this is not implemented yet, see comments below). The variabilization of a literal is part of the process of
        * the variabilization of a clause. In this process, constants of the literal that are present in other literals of the clause,
        * which have already been variabilized, should be replaced by the same variable that has already been used for these constants.
-       * 
        *
-       * @param previousMap a map containing previous bindings of constants to variables.
-       * @param accum an accumulator that collects competed (variabilized) compound sub-terms.
-       * @param remaining a list containing all sub-terms remaining to be variabilized.
-       * @param ttypes a list collecting typing predicates for the generated variables, e.g. person(X1), time(X100) etc.
-       * @param counter a counter that is incremented by 1 each time a new variable is generated. The name a new variable is
-       * simply "X"+currentCounterValue.
+       *
+       * @param previousMap @tparam scala.collection.mutable.Map[Expression, Expression] a map containing previous bindings of constants to variables.
+       * @param accum @tparam List[Literal] an accumulator that collects competed (variabilized) compound sub-terms.
+       * @param remaining @tparam List[(Expression, Expression)] a list containing all sub-terms remaining to be variabilized.
+       * @param ttypes @tparam List[String] a list collecting typing predicates for the generated variables,
+       *  e.g. person(X1), time(X100) etc.
+       * @param counter @tparam Int a counter that is incremented by 1 each time a new variable is generated.
+       * The name a new variable is simply "X"+currentCounterValue.
+       * @Param runningMode @tparam String a flag indicating a "mode" (purpose) for which this method is called. Default is
+       * "", in which case the literal is simply variabilized. If mode = "extract-mode-terms", then this method
+       * is called on a ground literal and it processes the corresponding mode declaration, extracting a tuple
+       * (in,out,grnd) representing the terms of the ground atom that correspond to input, output or ground
+       * placemarkers respectively
        */
 
       def varbed = {
@@ -170,16 +234,16 @@ object Structures {
                val (varbed, ttypes, constVarMap, varCounter) =
                   variabilize(List(Literal(this.functor, List(), this.isNAF)), this.terms zip this.modeAtom.args,
                      scala.collection.mutable.Map[Expression, Expression](), List(), 0)
-               val l = Literal(varbed(0).functor, varbed(0).terms, 
-                               isNAF = false, typePreds = ttypes, modeAtom = this.modeAtom); 
+               val l = Literal(varbed(0).functor, varbed(0).terms,
+                  isNAF = false, typePreds = ttypes, modeAtom = this.modeAtom);
                (l, ttypes, constVarMap, varCounter)
          }
       }
 
       def variabilize(accum: List[Literal], remaining: List[(Expression, Expression)],
          previousMap: scala.collection.mutable.Map[Expression, Expression],
-         ttypes: List[String], counter: Int): (List[Literal], List[String], scala.collection.mutable.Map[Expression, Expression], Int) = {
-         
+         ttypes: List[String], counter: Int, runningMode: String = ""): (List[Literal], List[String], scala.collection.mutable.Map[Expression, Expression], Int) = {
+
          // x is a tuple (x1,x2), where x1 is a literal's constant and x2 is it's type as specified by the modeAtom 
          def f(x: (Expression, String), sign: String, tail: List[(Expression, Expression)],
             map: scala.collection.mutable.Map[Expression, Expression]) = {
@@ -222,6 +286,48 @@ object Structures {
             case Nil =>
                val pop = accum.last
                (accum.tail :+ Literal(pop.functor, pop.terms, pop.isNAF), ttypes, previousMap, counter)
+         }
+      }
+
+      /**
+       * Extracts the terms of the literal marked as input-output or ground terms.
+       *
+       * @param in @tparam List[Expression] an accumulator for input terms
+       * @param out @tparam List[Expression] an accumulator for output terms
+       * @param grnd @tparam List[Expression] an accumulator for ground terms
+       * @param remaining @tparam List[(Expression, Expression)] the (zipped) terms of the literal and the mode atom
+       * that remain to be checked
+       *
+       * @return a tuple (in,out,ground) carrying the marked terms
+       */
+
+      def getPlmrkTerms: (List[Expression], List[Expression], List[Expression]) =
+         getPlmrkTerms(List(), List(), List(), this.terms zip this.modeAtom.args)
+
+      def getPlmrkTerms(in: List[Expression], out: List[Expression], grnd: List[Expression],
+         remaining: List[(Expression, Expression)]): (List[Expression], List[Expression], List[Expression]) = {
+         remaining match {
+            case head :: tail => head match {
+               case (x: Constant, y: PosPlmrk) =>
+                  getPlmrkTerms(in ::: List(Constant(x.name, "+", y._type)), out, grnd, tail)
+               case (x: Constant, y: NegPlmrk) =>
+                  getPlmrkTerms(in, out ::: List(Constant(x.name, "-", y._type)), grnd, tail)
+               case (x: Constant, y: ConstPlmrk) =>
+                  getPlmrkTerms(in, out, grnd ::: List(Constant(x.name, "#", y._type)), tail)
+               case (x: Variable, y: PosPlmrk) =>
+                  getPlmrkTerms(in ::: List(Variable(x.name, "+", y._type)), out, grnd, tail)
+               case (x: Variable, y: NegPlmrk) =>
+                  getPlmrkTerms(in, out ::: List(Variable(x.name, "-", y._type)), grnd, tail)
+               case (x: Variable, y: ConstPlmrk) =>
+                  getPlmrkTerms(in, out, grnd ::: List(Variable(x.name, "#", y._type)), tail)
+               case (x: Literal, y: ModeAtom) =>
+                  val (newin, newout, newconst) =
+                     getPlmrkTerms(in, out, grnd, x.terms zip y.args)
+                  getPlmrkTerms(newin, newout, newconst, tail)
+               case _ => throw new LogicException(this.tostring + ": Unexpected type.")
+            }
+            case Nil =>
+               (in, out, grnd)
          }
       }
 
@@ -271,58 +377,57 @@ object Structures {
    }
 
    case class Clause(head: PosLiteral, body: List[Literal]) extends Expression {
-      
+
       /**
-       * Helper method that converts a clause to a List[Literal] with the head of the clause as the first element. 
+       * Helper method that converts a clause to a List[Literal] with the head of the clause as the first element.
        */
-      
+
       def toLiteralList = List(head.asLiteral) ++ (for (x <- body) yield x)
-      
+
       /**
        * Same as above, but returns a List[String].
        */
-      
+
       def toStrList: List[String] = List(head.tostring) ++ (for (x <- body) yield x.tostring)
-      
-       /**
-        * 
-        * 
-        * @returns the string representation of the clause
-        * @overrides tostring from Expression.
-        * 
-        */
-      
+
+      override def tostringQuote = this.tostring
+
+      /**
+       *
+       *
+       * @returns the string representation of the clause
+       * @overrides tostring from Expression.
+       *
+       */
+
       override def tostring = this.toStrList match {
          case List() => throw new LogicException("Cannot generate a Clause object for the empty clause")
          case h :: ts =>
             ts.length match {
                case 0 => h + "."
-               case 1 => h + " :- \n" + "   " + ts(0) + "."
-               case _ => h + " :- \n" + (for (x <- ts) yield if (ts.indexOf(x) == ts.length - 1) s"      $x." 
-                else s"      $x,").mkString("\n")
+               case 1 => h + " :- \n" + "      " + ts(0) + "."
+               case _ => h + " :- \n" + (for (x <- ts) yield if (ts.indexOf(x) == ts.length - 1) s"      $x."
+               else s"      $x,").mkString("\n")
             }
       }
 
       def varbed: Clause = {
-         var accum = ListBuffer[Literal]() 
-         var map = scala.collection.mutable.Map[Expression, Expression]() 
+         var accum = ListBuffer[Literal]()
+         var map = scala.collection.mutable.Map[Expression, Expression]()
          var counter = 0
-         val x = this.head.asLiteral
          for (x <- this.toLiteralList) {
-            val (a,_,c,d) = x.variabilize(List(Literal(x.functor, List(), x.isNAF)),
-                                        x.terms zip x.modeAtom.args, map, List(), counter)
-            accum ++= a
+            val (a, _, c, d) = x.variabilize(List(Literal(x.functor, List(), x.isNAF)),
+               x.terms zip x.modeAtom.args, map, List(), counter)
+            val aa = Literal(a(0).functor, a(0).terms, a(0).isNAF, x.modeAtom, a(0).typePreds)
+            accum ++= List(aa)
             map ++ c
             counter = d
          }
          val l = accum.toList
-         val out = Clause(l.head.asPosLiteral,l.tail)
+         val out = Clause(l.head.asPosLiteral, l.tail)
          out
       }
 
-      
-      
-      
       /**
        * this theta-subsumes other
        */
@@ -332,21 +437,21 @@ object Structures {
       }
 
       /**
-       * Replaces all variables with a new constant symbol 'skolem0', 'skolem1' etc. Same variables correspond to the 
+       * Replaces all variables with a new constant symbol 'skolem0', 'skolem1' etc. Same variables correspond to the
        * same constant symbol. Constants remain intact, i.e. they are used as skolem constants themselves. Example:
-       * 
-       * a(X,Y,Z) :- 
-       *    p(x,q(Y,const1,2),Z), 
-       *    not r(A,B,C). 
-       *    
+       *
+       * a(X,Y,Z) :-
+       *    p(x,q(Y,const1,2),Z),
+       *    not r(A,B,C).
+       *
        *    is turned into:
-       * 
-       * a(skolem0,skolem1,skolem2) :- 
+       *
+       * a(skolem0,skolem1,skolem2) :-
        *    p(skolem0,q(skolem1,const1,2),skolem2),
        *    not r(skolem3,skolem4,skolem5).
-       *    
+       *
        * Returns the skolemised clause and the 'vars -> skolems' map
-       *   
+       *
        */
 
       def skolemise: (Clause, Map[String, String]) = {
@@ -383,39 +488,26 @@ object Structures {
 
    }
 
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
    /**
-    * Classes representing a input/output/groung mode declarations placemarkers. 
-    * 
+    * Classes representing a input/output/groung mode declarations placemarkers.
+    *
     * @param _type the type/sort of the term, e.g. 'human' in the term '+human'.
     * @overrides val _type from Expression
     */
 
    case class PosPlmrk(override val _type: String) extends Expression {
       override val tostring = "+" + _type
+      override def tostringQuote = this.tostring
    }
    case class NegPlmrk(override val _type: String) extends Expression {
       override val tostring = "-" + _type
+      override def tostringQuote = this.tostring
    }
    case class ConstPlmrk(override val _type: String) extends Expression {
       override val tostring = "#" + _type
+      override def tostringQuote = this.tostring
    }
 
-   
-   
-   
-   
-   
    /**
     * A class representing a mode declaration atom.
     * @param functor the outer predicate symbol.
@@ -425,6 +517,7 @@ object Structures {
 
    case class ModeAtom(functor: String, args: List[Expression]) extends Expression {
 
+      val arity = this.args.length
       /**
        * @return a string representation of the mode declaration.
        * @overrides tostring from Term trait
@@ -432,6 +525,33 @@ object Structures {
       override val tostring: String = args match {
          case List() => functor
          case _ => functor + "(" + (for (a <- args) yield a.tostring).mkString(",") + ")"
+      }
+
+      /**
+       * @return a string representation of the mode declaration. This method is supposed to be called on a
+       * variabilized version of the mode declaration, and it surrounds with double quotes
+       * variables that correspond to output and ground placemarkers. For instance, assume the mode atom
+       *
+       * modeb(p(+type1,-type2,#type3))
+       *
+       * and its variabilized version
+       *
+       * p(X,Y,Z)
+       *
+       * The result of applying this method on the above is
+       *
+       * p(X,"Y","Z"). These atoms are passed to the ASP solver, in order to generate query atoms, for the
+       * construction of the body of a Kernel Set clause. The quoted variables are treated as constants by the
+       * solver, which generates instances by grounding only the variables that correspond to input terms.
+       * The quotes are removed by post-processing each atom in an answer set, thus obtaining a query atom (i.e.
+       * an atom of the form p(2,Y,Z) from the above). This is a query atom, which is subsequently used to
+       * generate groundings of the atom that bind only Y,Z vars, keeping the input term intact.
+       *
+       */
+
+      override def tostringQuote: String = args match {
+         case List() => functor
+         case _ => functor + "(" + (for (a <- args) yield a.tostringQuote).mkString(",") + ")"
       }
 
       /**
@@ -453,7 +573,7 @@ object Structures {
       /**
        *
        * This method does all the work of the variabilation.
-       * 
+       *
        * @param accum an accumulator that collects competed (variabilized) compound sub-terms.
        * @param remaining a list containing all remaining sub-terms that should be variabilized.
        * @param ttypes a list collecting typing predicates for the generated variables, e.g. person(X1), time(X100)
@@ -469,7 +589,7 @@ object Structures {
                case _ => accum.last
             }
             // We are variabilizing everything (it's modes variabilization) so replace all with a new Var.
-            val update = Literal(cur.functor, cur.terms :+ Variable("X" + counter, "+", x._type), false)
+            val update = Literal(cur.functor, cur.terms :+ Variable("X" + counter, sign, x._type), false)
             this.variabilize(accum.tail :+ update, tail, ttypes :+ x._type + "(X" + counter + ")", counter + 1)
          }
          remaining match {
@@ -489,19 +609,35 @@ object Structures {
          }
       }
 
+      /**
+       * Recieves a tuple of the form ('in','out','ground'), where each coordinate in the tuple is List[Expression]
+       * of constants marked as input, output or ground placemarkerks. From this input, this method constructs
+       * all istances of the current mode declaration atom 'm', generated as follows:
+       * -- Each input placemarker in 'm' is replaced by a term in 'in'
+       * -- Each ground placemarker in 'm' is replaced by a variable.
+       * -- Each output placemarker in 'm' is replaced by a variable.
+       *
+       * These constitute the query atoms, used to generate Kernel Set body atoms.
+       *
+       * @example
+       *
+       * Assume that the current mode atom is modeb(p(+entity1,-emtity2,#entity3)) and the input is
+       * (List("e1","e2"),List("e3"),List("e4","e5")). The result of this method is the list of atoms:
+       *
+       * List(p(e1,Y,Z),p(e2,Y,Z)).
+       *
+       * This method is to be called uppon a variabilized version of the mode atom, and replace the variables that
+       * correspond to input terms, with terms from 'in'
+       *
+       *
+       */
+
+      def generateQueryAtoms(input: (List[Expression], List[Expression], List[Expression])) = {
+
+      }
+
    }
 
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
    /**
     *
     * A labelled example is generated from a bottom clause C. The head of C has been generated by abduction
@@ -513,12 +649,37 @@ object Structures {
     * 'botClause' is the bottom clause from which the example results.
     */
 
-   case class LabelledExample(head: Literal, atoms: List[String],
-      botClause: String, commingFromDB: String = "") {
+   case class LabelledExample(groundKernelClause: Clause, varKernelClause: Clause, commingFromDB: String = "") {
+
+      val headAtomGrnd = groundKernelClause.head
+      val headAtomVarbed = varKernelClause.head
+      val exampleGrnd = groundKernelClause.body
+      val exampleVarbed = varKernelClause.body
       // We assume that time is the last argument in a literal, as is the case with the Event Calculus.
-      val timeKey = head.terms.last
-      val whatIs = head.functor
-      //varBotClause
+      val timeKey = groundKernelClause.head.terms.last.tostring
+      // is an initiatedAt or terminatedAt example?
+      val initOrTerm = headAtomGrnd.functor
+      // Which HLE is this example for?
+      val hle =
+         if (groundKernelClause.head.tostring.contains("meeting")) {
+            "meeting"
+         } else if (groundKernelClause.head.tostring.contains("moving")) {
+            "moving"
+         } else {
+            "fighting"
+         }
+      def asGrndInterpretation: List[String] = for (x <- groundKernelClause.body) yield x.tostring
+      def asVarbedInterpretation: List[String] = for (x <- varKernelClause.body) yield x.tostring
+
+   }
+
+   case class Example(e: DBObject, commingFromDB: String = "") {
+      val annotation = e.asInstanceOf[BasicDBObject].get("annotation").asInstanceOf[BasicDBList].toList.map { x => x.toString() }
+      // Wraps inside an example/1 predicate for passing to ASP 
+      val annotationASP =
+         e.asInstanceOf[BasicDBObject].get("annotation").asInstanceOf[BasicDBList].toList.map(x => s"example($x).");
+      val narrative = e.asInstanceOf[BasicDBObject].get("narrative").asInstanceOf[BasicDBList].toList.map { x => x.toString() }
+      val narrativeASP = e.asInstanceOf[BasicDBObject].get("narrative").asInstanceOf[BasicDBList].toList.map(x => s"$x.");
    }
 
    class ThetaSubsumption {

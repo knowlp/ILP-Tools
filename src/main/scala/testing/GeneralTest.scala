@@ -10,9 +10,19 @@ package testing
 
 import reasoning.Structures._
 import reasoning.Utils._
+import reasoning.Utils
 import reasoning.Reasoning._
+import reasoning.Core
+import scala.util.matching.Regex._
+import scala.util.matching.Regex
+import parsing.LogicParser._
 
-object GeneralTest {
+import akka.actor.Actor
+import akka.actor.ActorSystem
+import akka.actor.Props
+
+
+object GeneralTest extends ModesParser{
 
   def main(args: Array[String]) {
     /*
@@ -41,10 +51,46 @@ object GeneralTest {
     clause.toLiteralList.foreach(x => println(x.modeAtom))
     */
 
+    
+    // Parse all caviar in DB
+    //Utils.caviartoMongo("/home/nkatz/dev/CAVIAR-abrupt") 
+    
+
+    //val m = reasoning.Utils.objectFactory.getModeHAtom("modeh(initiatedAt(moving(+person,+person,test(#ss,#ss),-person),+time))")
+    //println(m)
+    //val z = m.varbed
+    //println(z)
+    //println(z.tostringQuote)
+    //println(m.varbed.tostring)
+    //println(m.varbed.tostringQuote)
+
+    //val l = reasoning.Utils.objectFactory.getLiteral("initiatedAt(moving(id1,id2,test(x,y),id1),10)")
+    //println(l.tostring)
+    //val ll = Literal(l.functor, l.terms, l.isNAF, modeAtom = m)
+    //println(ll)
+    //println(ll.getPlmrkTerms)
+
+
     /* Test Abduction */ 
     //abduce("modehs")
     /* Test Kernel Set generation */ 
-    generateKernel
+    //generateKernel
+    //val z = Core.modehs.map(x => x.varbed)
+    //matchModesProgram(z)
+    
+     
+     //xhail
+     
+     getAllExamples("CAVIAR-01-Walk1", "examples")
+     
+     //val l = reasoning.Utils.objectFactory.getLiteral("happensAt(walking(X),Test)")
+     //println(l.getMatchingMode.tostring)    
+    
+     //parseOutput(literal,"holdsAt(available(\"X0\"),1)")
+
+    
+    //Utils.getAllExamples("CAVIAR-01-Walk1", "examples")
+
 
   }
 

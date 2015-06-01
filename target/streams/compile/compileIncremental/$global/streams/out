@@ -2,39 +2,14 @@
 [0m[[0mdebug[0m] [0mInitial source changes: [0m
 [0m[[0mdebug[0m] [0m	removed:Set()[0m
 [0m[[0mdebug[0m] [0m	added: Set()[0m
-[0m[[0mdebug[0m] [0m	modified: Set(/home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Reasoning.scala, /home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Structures.scala)[0m
+[0m[[0mdebug[0m] [0m	modified: Set()[0m
 [0m[[0mdebug[0m] [0mRemoved products: Set()[0m
 [0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set()[0m
 [0m[[0mdebug[0m] [0mModified binary dependencies: Set()[0m
-[0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set(/home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Reasoning.scala, /home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Structures.scala)[0m
+[0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set()[0m
 [0m[[0mdebug[0m] [0m[0m
 [0m[[0mdebug[0m] [0mSources indirectly invalidated by:[0m
 [0m[[0mdebug[0m] [0m	product: Set()[0m
 [0m[[0mdebug[0m] [0m	binary dep: Set()[0m
 [0m[[0mdebug[0m] [0m	external source: Set()[0m
-[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(/home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Reasoning.scala, /home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Structures.scala)[0m
-[0m[[0minfo[0m] [0mCompiling 2 Scala sources to /home/nkatz/dev/ILP-Tools-2/target/scala-2.11/classes...[0m
-[0m[[0mdebug[0m] [0mGetting compiler-interface from component compiler for Scala 2.11.6[0m
-[0m[[0mdebug[0m] [0mGetting compiler-interface from component compiler for Scala 2.11.6[0m
-[0m[[0mdebug[0m] [0mRunning cached compiler d3ca3c, interfacing (CompilerInterface) with Scala compiler version 2.11.6[0m
-[0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
-[0m[[0mdebug[0m] [0m	-bootclasspath[0m
-[0m[[0mdebug[0m] [0m	/usr/lib/jvm/java-7-openjdk-i386/jre/lib/resources.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/rt.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/jsse.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/jce.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/charsets.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/rhino.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/lib/jfr.jar:/usr/lib/jvm/java-7-openjdk-i386/jre/classes:/home/nkatz/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.6.jar[0m
-[0m[[0mdebug[0m] [0m	-classpath[0m
-[0m[[0mdebug[0m] [0m	/home/nkatz/dev/ILP-Tools-2/target/scala-2.11/classes:/home/nkatz/.ivy2/cache/org.mongodb/casbah-commons_2.11/jars/casbah-commons_2.11-2.8.1.jar:/home/nkatz/.ivy2/cache/com.github.nscala-time/nscala-time_2.11/jars/nscala-time_2.11-1.0.0.jar:/home/nkatz/.ivy2/cache/joda-time/joda-time/jars/joda-time-2.3.jar:/home/nkatz/.ivy2/cache/org.joda/joda-convert/jars/joda-convert-1.2.jar:/home/nkatz/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.6.0.jar:/home/nkatz/.ivy2/cache/org.mongodb/mongo-java-driver/jars/mongo-java-driver-2.13.1.jar:/home/nkatz/.ivy2/cache/org.mongodb/casbah-core_2.11/jars/casbah-core_2.11-2.8.1.jar:/home/nkatz/.ivy2/cache/org.mongodb/casbah-query_2.11/jars/casbah-query_2.11-2.8.1.jar:/home/nkatz/.ivy2/cache/org.mongodb/casbah-gridfs_2.11/jars/casbah-gridfs_2.11-2.8.1.jar:/home/nkatz/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.6.jar:/home/nkatz/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/bundles/scala-parser-combinators_2.11-1.0.3.jar[0m
-[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Reasoning.scala:232: not found: type Literal[0m
-[0m[[31merror[0m] [0m    def matchesMode(abduced: Literal, modeAtom: ModeAtom): Any = {[0m
-[0m[[31merror[0m] [0m                             ^[0m
-[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Reasoning.scala:232: not found: type ModeAtom[0m
-[0m[[31merror[0m] [0m    def matchesMode(abduced: Literal, modeAtom: ModeAtom): Any = {[0m
-[0m[[31merror[0m] [0m                                                ^[0m
-[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Reasoning.scala:227: missing arguments for method matchesMode;[0m
-[0m[[31merror[0m] [0mfollow this method with `_' if you want to treat it as a partially applied function[0m
-[0m[[31merror[0m] [0m          matchesMode[0m
-[0m[[31merror[0m] [0m          ^[0m
-[0m[[31merror[0m] [0m/home/nkatz/dev/ILP-Tools-2/src/main/scala/reasoning/Reasoning.scala:233: not found: value modeHAtom[0m
-[0m[[31merror[0m] [0m       val toLit = Utils.objectFactory.getLiteral(modeHAtom)[0m
-[0m[[31merror[0m] [0m                                                  ^[0m
-[0m[[31merror[0m] [0mfour errors found[0m
-[0m[[0mdebug[0m] [0mCompilation failed (CompilerInterface)[0m
-[0m[[31merror[0m] [0m(compile:[31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set()[0m

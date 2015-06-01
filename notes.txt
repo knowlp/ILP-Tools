@@ -1,5 +1,20 @@
-
-
+/*
+	 * -------------------------------------------------------------------------------------------
+	 * Utilities for connecting to mongo and getting examples. Fixes for locking below.
+	 * -------------------------------------------------------------------------------------------
+	 * 
+	 * Fix mongo connectivity issues: 
+	 *                                                              
+	 * -- Manually remove the lockfile: sudo rm /var/lib/mongodb/mongod.lock  
+	 *                      
+	 * -- Run the repair script: sudo -u mongodb mongod -f /etc/mongodb.conf --repair 
+	 *              
+	 * -- Start your MongoDB server with sudo start mongodb and verify it is running with sudo 
+	 *     
+	 *    status mongodb and by trying to connect to it with mongo test.
+	 * 
+	 * --------------------------------------------------------------------------------------------
+	 */
 
 /*
  * Check the code examples in the casbah sources!!
